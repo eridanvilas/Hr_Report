@@ -1,7 +1,4 @@
-﻿using MediatR;
-using Relatorio_Mensal_API.Application.Handlers;
-
-namespace Relatorio_Mensal_API.Application.Response
+﻿namespace Relatorio_Mensal_API.Application.Response
 {
     public class FileReaderCommandResponse
     {
