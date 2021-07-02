@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Configuration;
 using Relatorio_Mensal_API.Application.Commands;
 using Relatorio_Mensal_API.Application.Response;
 using Relatorio_Mensal_API.Models;
@@ -13,16 +14,18 @@ namespace Relatorio_Mensal_API.Application.Handlers
     public class FileReaderHandler : IRequestHandler<FileReaderCommand, FileReaderCommandResponse>
     {
         private readonly IMediator _mediator;
-        public FileReaderHandler(IMediator mediator)
+        private readonly IConfiguration _configuration;
+        public FileReaderHandler(IMediator mediator, IConfiguration configuration)
         {
             _mediator = mediator;
+            _configuration = configuration;
         }
 
         public async Task<FileReaderCommandResponse> Handle(FileReaderCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                var filesPath = Directory.GetCurrentDirectory();
+                var filesPath = _configuration.GetSection("PathFile").Value;
 
                 var extension = Path.GetExtension(request.File.FileName);
 
@@ -31,7 +34,7 @@ namespace Relatorio_Mensal_API.Application.Handlers
 
                 if (request.File.Length > 0)
                 {
-                    var fullPath = Path.GetFullPath(request.File.FileName);
+                    var fullPath = filesPath + request.File.FileName;
 
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
