@@ -29,6 +29,9 @@ namespace Relatorio_Mensal_API.Application.Handlers
             {
                 var filesPath = _configuration.GetSection("PathFile").Value;
 
+                if (request.File == null)
+                    throw new Exception("Nenhum arquivo foi anexado..");
+
                 var extension = Path.GetExtension(request.File.FileName);
 
                 if (extension != ".csv")
@@ -77,9 +80,10 @@ namespace Relatorio_Mensal_API.Application.Handlers
                     var months = new List<string>();
                     foreach (var item in hoursworkeds)
                     {
-                        if (months.Where(x => x == item.Date.Value.ToString("MMMM", CultureInfo.CreateSpecificCulture("pt-BR"))).Count() == 0)
+                        if (months.Where(x => x == item.Date.Value.ToString("MMMM")).Count() == 0)
                         {
-                            months.Add(item.Date.Value.ToString("MMMM", CultureInfo.CreateSpecificCulture("pt-BR")));
+                            var temp = item.Date.Value.ToString("MMMM");
+                            months.Add(temp);
                         }
                     }
 
