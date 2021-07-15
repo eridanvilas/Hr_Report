@@ -4,7 +4,7 @@ namespace Relatorio_Mensal_API.Models
 {
     public class HoursWorked
     {
-        public HoursWorked(string usuario, DateTime date, TimeSpan horaEntrada, TimeSpan horaSaida, TimeSpan horaRetorno, TimeSpan horaFinal, TimeSpan totalHoras, string descrição)
+        public HoursWorked(string usuario, DateTime date, string horaEntrada, string horaSaida, string horaRetorno, string horaFinal, string totalHoras, string descricao)
         {
             Usuario = usuario;
             Date = date;
@@ -13,16 +13,16 @@ namespace Relatorio_Mensal_API.Models
             HoraRetorno = horaRetorno;
             HoraFinal = horaFinal;
             TotalHoras = totalHoras;
-            Descrição = descrição;
+            Descricao = descricao;
         }
 
         public string Usuario { get; set; }
         public DateTime? Date { get; set; }
-        public TimeSpan? HoraEntrada { get; set; }
-        public TimeSpan? HoraSaida { get; set; }
-        public TimeSpan? HoraRetorno { get; set; }
-        public TimeSpan? HoraFinal { get; set; }
-        public TimeSpan? TotalHoras { get; set; }
-        public string Descrição { get; set; }
+        public string HoraEntrada { get; set; }
+        public string HoraSaida { get; set; }
+        public string HoraRetorno { get; set; }
+        public string HoraFinal { get; set; }
+        public string TotalHoras { get; set; }
+        public string Descricao { get; set; }
     }
 }

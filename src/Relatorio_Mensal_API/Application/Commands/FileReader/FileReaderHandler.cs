@@ -6,6 +6,7 @@ using Relatorio_Mensal_API.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -42,12 +43,13 @@ namespace Relatorio_Mensal_API.Application.Handlers
                     }
 
                     var hoursworkeds = new List<HoursWorked>();
-
+                    var usuario = "";
                     var lines = File.ReadAllLines(fullPath);
                     foreach (string line in lines)
                     {
                         if (line != lines[0])
                         {
+                          
                             int nNull = 0;
                             var values = line.Split(';');
                             foreach (var item in values)
@@ -59,19 +61,24 @@ namespace Relatorio_Mensal_API.Application.Handlers
                             if (nNull > 1)
                                 continue;
 
+                            usuario = values[0] != "" ? values[0] : usuario; 
+ 
+
                             hoursworkeds.Add(new HoursWorked
-                                (values[0],
+                                (usuario,
                                     Convert.ToDateTime(values[1]),
-                                    TimeSpan.Parse(values[2]),
-                                    TimeSpan.Parse(values[3]),
-                                    TimeSpan.Parse(values[4]),
-                                    TimeSpan.Parse(values[5]),
-                                    TimeSpan.Parse(values[7]),
-                                    ""));
+                                    values[2],
+                                    values[3],
+                                    values[4],
+                                    values[5],
+                                    values[7],
+                                    null));
                         }
 
                     }
-                    return await Task.FromResult(new FileReaderCommandResponse("Arquivo Lido com sucesso!"));
+
+                    string jsonString = JsonSerializer.Serialize(hoursworkeds);
+                    return await Task.FromResult(new FileReaderCommandResponse(jsonString));
                 }
                 else
                     return await Task.FromResult(new FileReaderCommandResponse("Ocorreu um erro inesperado"));
