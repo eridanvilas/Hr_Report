@@ -5,8 +5,10 @@ using Relatorio_Mensal_API.Application.Response;
 using Relatorio_Mensal_API.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text.Json;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,6 +29,9 @@ namespace Relatorio_Mensal_API.Application.Handlers
             try
             {
                 var filesPath = _configuration.GetSection("PathFile").Value;
+
+                if (request.File == null)
+                    throw new Exception("Nenhum arquivo foi anexado..");
 
                 var extension = Path.GetExtension(request.File.FileName);
 
@@ -75,6 +80,16 @@ namespace Relatorio_Mensal_API.Application.Handlers
                                     null));
                         }
 
+                    }
+
+                    var months = new List<string>();
+                    foreach (var item in hoursworkeds)
+                    {
+                        if (months.Where(x => x == item.Date.Value.ToString("MMMM")).Count() == 0)
+                        {
+                            var temp = item.Date.Value.ToString("MMMM");
+                            months.Add(temp);
+                        }
                     }
 
                     string jsonString = JsonSerializer.Serialize(hoursworkeds);
