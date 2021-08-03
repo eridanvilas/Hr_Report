@@ -1,0 +1,13 @@
+.home .title{
+    font-size: 3rem;
+    line-height: 0.5;
+    color :green;
+    text-align: center;
+}
+
+.home .subtitle {
+    font-size: 1.1rem;
+    padding-top: 20px;
+    color: rgb(1, 29, 5);
+    text-align: center;
+}
