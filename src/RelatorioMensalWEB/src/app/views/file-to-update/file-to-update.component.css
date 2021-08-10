@@ -1,0 +1,13 @@
+.file .upload{
+    text-align: center;
+    color :green;
+    background: transparent;
+    text-align: center;
+}
+
+.file .namefile{
+    font-size: 1.1rem;
+    padding-top: 20px;
+    color: rgb(1, 29, 5);
+    text-align: center;
+}

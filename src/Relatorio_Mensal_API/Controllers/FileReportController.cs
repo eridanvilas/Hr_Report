@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -8,7 +9,8 @@ using System.Threading.Tasks;
 namespace Relatorio_Mensal_API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/v1/file")]
+    [EnableCors]
     public class FileReportController : ControllerBase
     {
 

@@ -1,3 +1,9 @@
-<span class="material-icons">
-    upload
-</span>
+<div>
+    <input type="file" #file placeholder="Selecione o .CSV" accept=".csv" (change)="fileupload(file.files)" hidden>
+    <button type="submit" class="file upload" (click)="file.click()"><b>Enviar</b>
+        <span class="material-icons file upload">
+            upload
+        </span>
+    </button>
+    <label><b>Arquivo: {{fileName}}</b></label>
+</div>

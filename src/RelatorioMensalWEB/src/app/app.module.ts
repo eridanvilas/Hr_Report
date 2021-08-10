@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,6 +17,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { HomeComponent } from './views/home/home.component';
 import { RelatorioComponent } from './views/relatorio/relatorio.component';
 import { FileToUpdateComponent } from './views/file-to-update/file-to-update.component';
+
 
 // import from '@angular/material/grid-list';
 
@@ -38,6 +40,7 @@ import { FileToUpdateComponent } from './views/file-to-update/file-to-update.com
     MatSidenavModule,
     MatListModule,
     MatCardModule,
+    HttpClientModule,
     MatFormFieldModule
   ],
   providers: [],
