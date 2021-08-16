@@ -22,6 +22,14 @@ namespace Relatorio_Mensal_API
 
             services.AddControllers();
             services.AddMediatR(typeof(Startup));
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                    });
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Relatorio_Mensal_API", Version = "v1" });

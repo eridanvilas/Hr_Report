@@ -28,7 +28,7 @@ export class FileToUpdateComponent implements OnInit {
     this.fileName = this.fileToUpload?.name;
 
     const request = new FormData();
-    request.append('file', this.fileToUpload , this.fileToUpload.name);
+    request.append('FormFile', this.fileToUpload , this.fileToUpload.name);
 
     this.http.post(`${environment.apiUrl}/api/v1/file/Upload`, request, {reportProgress: true, observe: 'events' })
       .subscribe(event => {
