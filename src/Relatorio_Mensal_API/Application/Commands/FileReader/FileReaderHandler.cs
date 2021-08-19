@@ -5,12 +5,13 @@ using Relatorio_Mensal_API.Application.Response;
 using Relatorio_Mensal_API.Models;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Text.Json;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Relatorio_Mensal_API.Application.Notifications.FileReader;
+using Relatorio_Mensal_API.Application.Notifications.Error;
+using Relatorio_Mensal_API.Application.Commands.Create;
 
 namespace Relatorio_Mensal_API.Application.Handlers
 {
@@ -54,7 +55,7 @@ namespace Relatorio_Mensal_API.Application.Handlers
                     {
                         if (line != lines[0])
                         {
-                          
+
                             int nNull = 0;
                             var values = line.Split(';');
                             foreach (var item in values)
@@ -66,8 +67,8 @@ namespace Relatorio_Mensal_API.Application.Handlers
                             if (nNull > 1)
                                 continue;
 
-                            usuario = values[0] != "" ? values[0] : usuario; 
- 
+                            usuario = values[0] != "" ? values[0] : usuario;
+
 
                             hoursworkeds.Add(new HoursWorked
                                 (usuario,
@@ -78,6 +79,7 @@ namespace Relatorio_Mensal_API.Application.Handlers
                                     values[5],
                                     values[7],
                                     null));
+                            await _mediator.Publish(new FileReaderNotification { Usuario = usuario, Date = Convert.ToDateTime(values[1]) });
                         }
 
                     }
@@ -92,8 +94,13 @@ namespace Relatorio_Mensal_API.Application.Handlers
                         }
                     }
 
-                    string jsonString = JsonSerializer.Serialize(hoursworkeds);
-                    return await Task.FromResult(new FileReaderCommandResponse(jsonString));
+                    //string jsonString = JsonSerializer.Serialize(hoursworkeds);
+                    foreach (var hoursWorked in hoursworkeds)
+                    {
+                        await _mediator.Send(new CreateCommand(hoursWorked));
+                    }
+
+                    return await Task.FromResult(new FileReaderCommandResponse("Arquivo Lido Com Sucesso"));
                 }
                 else
                     return await Task.FromResult(new FileReaderCommandResponse("Ocorreu um erro inesperado"));
@@ -101,7 +108,9 @@ namespace Relatorio_Mensal_API.Application.Handlers
 
             catch (Exception ex)
             {
+                await _mediator.Publish(new ErrorNotification { Error = ex.Message, StackError = ex.StackTrace });
                 return await Task.FromResult(new FileReaderCommandResponse("Ocorreu um erro: " + ex.Message));
+
             }
         }
     }
