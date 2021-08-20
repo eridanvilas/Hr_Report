@@ -16,3 +16,8 @@
     width: 100%;
     bottom: 80px;
 }
+
+.content{
+    padding: 10px;
+    background-color: #fff;
+}

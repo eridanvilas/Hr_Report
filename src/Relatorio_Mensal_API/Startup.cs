@@ -5,6 +5,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Relatorio_Mensal_API.Repositories;
+using Relatorio_Mensal_API.Repositories.Contrants;
+using Relatorio_Mensal_API.Repositories.HoursWorked.CreateRepository;
+using Relatorio_Mensal_API.Repositories.HoursWorked.GetByUser;
 
 namespace Relatorio_Mensal_API
 {
@@ -17,19 +21,28 @@ namespace Relatorio_Mensal_API
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
 
             services.AddControllers();
+            services.AddTransient<IHoursWorkedRepository, HoursWorkedRepository>();
+            services.AddTransient<IGetByUserRepository, GetByUserRepository>();
+            services.AddTransient<ICreateRepository, CreateRepository>();
             services.AddMediatR(typeof(Startup));
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                    });
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Relatorio_Mensal_API", Version = "v1" });
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -42,7 +55,7 @@ namespace Relatorio_Mensal_API
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseCors();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

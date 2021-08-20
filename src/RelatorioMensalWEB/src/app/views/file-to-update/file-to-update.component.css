@@ -1,11 +1,11 @@
-.home .title{
-    font-size: 3rem;
-    line-height: 0.5;
+.file .upload{
+    text-align: center;
     color :green;
+    background: transparent;
     text-align: center;
 }
 
-.home .subtitle {
+.file .namefile{
     font-size: 1.1rem;
     padding-top: 20px;
     color: rgb(1, 29, 5);
