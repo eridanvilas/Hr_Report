@@ -25,31 +25,28 @@ namespace Relatorio_Mensal_API.Repositories.HoursWorked.CreateRepository
             await connection.ExecuteAsync(
                 @"INSERT INTO HoursWorked
                     (Usuario,
-                     Date,
+                     Data,
                      HoraEntrada,
                      HoraSaida,
-                     HoraRetorno,
-                     HoraFinal,
                      TotalHoras,
+                     Projeto,
                      Descricao)
                 VALUES
                     (@Usuario,
-                     @Date,
+                     @Data,
                      @HoraEntrada,
                      @HoraSaida,
-                     @HoraRetorno,
-                     @HoraFinal,
                      @TotalHoras,
+                     @Projeto,
                      @Descricao);",
                 new
                 {
                     Usuario = hoursWorked.Usuario,
-                    Date = hoursWorked.Date,
+                    Data = hoursWorked.Data,
                     HoraEntrada= hoursWorked.HoraEntrada,
                     HoraSaida= hoursWorked.HoraSaida,
-                    HoraRetorno= hoursWorked.HoraRetorno,
-                    HoraFinal= hoursWorked.HoraFinal,
-                    TotalHoras= hoursWorked.TotalHoras,
+                    TotalHoras = hoursWorked.TotalHoras,
+                    Projeto= hoursWorked.Projeto,
                     Descricao= hoursWorked.Descricao
                 });
         }
