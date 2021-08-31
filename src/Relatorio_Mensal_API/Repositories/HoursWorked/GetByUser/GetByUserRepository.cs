@@ -16,13 +16,19 @@ namespace Relatorio_Mensal_API.Repositories.HoursWorked.GetByUser
         }
 
         private string Connection => _configuration.GetConnectionString("DefaultConnection");
-        public async Task<IEnumerable<Models.HoursWorked>> GetAsync(string user)
+        public async Task<IList<Models.HoursWorked>> GetAsync(string user)
         {
             using var connection = new SqliteConnection(Connection);
-            return await connection.QueryAsync<Models.HoursWorked>(
-                sql: @"SELECT * 
-                    FROM HoursWorked
-                    WHERE USUARIO =@User",
+            return (IList<Models.HoursWorked>)await connection.QueryAsync<Models.HoursWorked>(
+                sql: @"SELECT USUARIO,
+	                            DATA,
+		                        HORAENTRADA,
+		                        HORASAIDA,
+		                        TOTALHORAS,
+		                        PROJETO,
+		                        DESCRICAO
+	                     FROM HoursWorked
+                         WHERE USUARIO =@User",
                 param: new { User = user }
                 );
         }
