@@ -18,7 +18,7 @@ namespace Relatorio_Mensal_API.Models
         }
 
         public string Usuario { get; set; }
-        public DateTime? Data { get; set; }
+        public DateTime Data { get; set; }
         public string HoraEntrada { get; set; }
         public string HoraSaida { get; set; }
         public string TotalHoras { get; set; }
