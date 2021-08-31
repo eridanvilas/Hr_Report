@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { HttpEventType, HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { FileUploader } from 'ng2-file-upload';
 
 @Component({
   selector: 'app-file-to-update',
@@ -10,14 +9,15 @@ import { FileUploader } from 'ng2-file-upload';
 })
 export class FileToUpdateComponent implements OnInit {
 
+  loading = false;
   fileToUpload: File | undefined;
-  fileName? = '';
-
+  fileName?= '';
   @ViewChild('file') file!: ElementRef;
 
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
+
   }
 
   fileupload = (files: any) => {
@@ -26,11 +26,11 @@ export class FileToUpdateComponent implements OnInit {
 
     this.fileToUpload = <File>files[0];
     this.fileName = this.fileToUpload?.name;
-
     const request = new FormData();
-    request.append('FormFile', this.fileToUpload , this.fileToUpload.name);
+    request.append('FormFile', this.fileToUpload, this.fileToUpload.name);
 
-    this.http.post(`${environment.apiUrl}/api/v1/file/Upload`, request, {reportProgress: true, observe: 'events' })
+
+    this.http.post(`${environment.apiUrl}/api/v1/file/Upload`, request, { reportProgress: true, observe: 'events' })
       .subscribe(event => {
 
         if (event.type === HttpEventType.Response) {
