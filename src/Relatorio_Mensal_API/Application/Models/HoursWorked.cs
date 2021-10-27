@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 
 namespace Relatorio_Mensal_API.Models
@@ -17,12 +18,19 @@ namespace Relatorio_Mensal_API.Models
             Descricao = descricao;
         }
 
+        [JsonProperty("usuario")]
         public string Usuario { get; set; }
+        [JsonProperty("data")]
         public DateTime Data { get; set; }
+        [JsonProperty("horaEntrada")]
         public string HoraEntrada { get; set; }
+        [JsonProperty("horaSaida")]
         public string HoraSaida { get; set; }
+        [JsonProperty("totalHoras")]
         public string TotalHoras { get; set; }
+        [JsonProperty("projeto")]
         public string Projeto { get; set; }
+        [JsonProperty("descricao")]
         public string Descricao { get; set; }
     }
 }

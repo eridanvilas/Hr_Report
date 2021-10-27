@@ -1,3 +1,4 @@
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -5,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Relatorio_Mensal_API.Application.Mapper;
 using Relatorio_Mensal_API.Repositories;
 using Relatorio_Mensal_API.Repositories.Contrants;
 using Relatorio_Mensal_API.Repositories.HoursWorked.CreateRepository;
@@ -23,12 +25,19 @@ namespace Relatorio_Mensal_API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
 
+
+            IMapper mapper = mapperConfig.CreateMapper();
             services.AddControllers();
             services.AddTransient<IHoursWorkedRepository, HoursWorkedRepository>();
             services.AddTransient<IGetByUserRepository, GetByUserRepository>();
             services.AddTransient<ICreateRepository, CreateRepository>();
             services.AddMediatR(typeof(Startup));
+            services.AddSingleton(mapper);
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(

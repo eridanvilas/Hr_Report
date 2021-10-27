@@ -97,18 +97,6 @@ namespace Relatorio_Mensal_API.Application.Handlers
                         }
 
                     }
-
-                    //var months = new List<string>();
-                    //foreach (var item in hoursworkeds)
-                    //{
-                    //    if (months.Where(x => x == item.Data.Value.ToString("MMMM")).Count() == 0)
-                    //    {
-                    //        var temp = item.Data.Value.ToString("MMMM");
-                    //        months.Add(temp);
-                    //    }
-                    //}
-
-                    //string jsonString = JsonSerializer.Serialize(hoursworkeds);
                     foreach (var hoursWorked in hoursworkeds)
                     {
                         await _mediator.Send(new CreateCommand(hoursWorked));

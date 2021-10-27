@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Relatorio_Mensal_API.Models;
+using Relatorio_Mensal_API.Repositories.Contrants;
 using Relatorio_Mensal_API.Repositories.HoursWorked.GetByUser;
 using System.Collections.Generic;
 using System.Data;
@@ -16,45 +18,22 @@ namespace Relatorio_Mensal_API.Application.Commands.GetByUser
     {
         private readonly IMediator _mediator;
         private readonly IConfiguration _configuration;
-        private readonly IGetByUserRepository _getByUserRepository;
+        private readonly IHoursWorkedRepository _hoursWorkedRepository;
 
-        public GetByUserHandler(IMediator mediator, IConfiguration configuration, IGetByUserRepository getByUserRepository)
+        public GetByUserHandler(IMediator mediator, IConfiguration configuration, IHoursWorkedRepository hoursWorkedRepository)
         {
             _mediator = mediator;
             _configuration = configuration;
-            _getByUserRepository = getByUserRepository;
+            _hoursWorkedRepository = hoursWorkedRepository;
         }
 
-        public async Task<File> Handle(GetByUserCommand request, CancellationToken cancellationToken)
+        public async Task<GetByUserCommandResponse> Handle(GetByUserCommand request, CancellationToken cancellationToken)
         {
-            var response = await _getByUserRepository.GetAsync(request.Usuario);
-            var listMonth = response.ToList().Where(x => x.Data.Month == request.Mes);
-            var json = System.Text.Json.JsonSerializer.Serialize(listMonth);
+            IList<HoursWorked> hoursWorked = (IList<HoursWorked>)await _hoursWorkedRepository.GetAsync(request.Usuario);
+            var listMonth = hoursWorked.ToList().Where(x => x.Data.Month == request.Mes).ToList();
 
-            var dataTable = (DataTable)JsonConvert.DeserializeObject(json, (typeof(DataTable)));
-
-            var lines = new List<string>();
-            string[] columnNames = dataTable.Columns.Cast<DataColumn>().
-                                              Select(column => column.ColumnName).
-                                              ToArray();
-            var header = string.Join(";", columnNames) + "\n";
-            lines.Add(header);
-            var valueLines = dataTable.AsEnumerable()
-                               .Select(row => string.Join(";", row.ItemArray)).ToArray();
-
-            for (int i = 0; i < valueLines.Count(); i++)
-            {
-                valueLines[i] += "\n";
-            }
-
-            lines.AddRange(valueLines);
-            string monthName = listMonth.Select(x => x.Data).FirstOrDefault().ToString("MMMM");
-            string yearName = listMonth.Select(x => x.Data).FirstOrDefault().ToString("yyyy");
-            var file = File(Encoding.UTF8.GetBytes(string.Concat(lines)),
-                            "text/csv",
-                            "Relatorio " + monthName + " - " + yearName + ".csv");
-
-            return await Task.FromResult(file);
+            var response = new GetByUserCommandResponse(listMonth);
+            return response;
         }
     }
 }
